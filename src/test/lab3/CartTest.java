@@ -1,58 +1,79 @@
-package com.bondarenko.universityAssigment.lab3;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CartTest {
-    Cart cart;
+    @Test
+    void addProduct() {
+        Cart cart = new Cart();
+        Product product1 = new Product(1, "Product 1");
+        Product product2 = new Product(2, "Product 2");
 
-    @BeforeEach
-    void setUp() {
-        cart = new Cart();
+        cart.addProduct(product1);
+        cart.addProduct(product2);
+
+        List<Product> expectedProducts = new ArrayList<>();
+        expectedProducts.add(product1);
+        expectedProducts.add(product2);
+
+        assertEquals(expectedProducts, cart.getProducts());
     }
 
     @Test
-    void AddProduct_ValidProduct_ShouldBeContainedInCartProducts() {
-        var product = new Product(0, "New product", 1);
+    void addProducts() {
+        Cart cart = new Cart();
+        Product product1 = new Product(1, "Product 1");
+        Product product2 = new Product(2, "Product 2");
+        Product product3 = new Product(3, "Product 3");
 
-        cart.addProduct(product);
+        List<Product> productsToAdd = new ArrayList<>();
+        productsToAdd.add(product1);
+        productsToAdd.add(product2);
+        productsToAdd.add(product3);
 
-        assertTrue(cart.getProducts().contains(product));
+        cart.addProducts(productsToAdd);
+
+        List<Product> expectedProducts = new ArrayList<>();
+        expectedProducts.add(product1);
+        expectedProducts.add(product2);
+        expectedProducts.add(product3);
+
+        assertEquals(expectedProducts, cart.getProducts());
     }
 
     @Test
-    void AddProducts_ValidProducts_ShouldBeContainedInCartProducts() {
-        var products = List.of(
-                new Product(0, "New product", 1),
-                new Product(0, "Another product", 2),
-                new Product(0, "Yet another product", 3)
-        );
+    void removeProduct() {
+        Cart cart = new Cart();
+        Product product1 = new Product(1, "Product 1");
+        Product product2 = new Product(2, "Product 2");
 
-        cart.addProducts(products);
+        cart.addProduct(product1);
+        cart.addProduct(product2);
 
-        assertTrue(cart.getProducts().containsAll(products));
+        cart.removeProduct(product1);
+
+        List<Product> expectedProducts = new ArrayList<>();
+        expectedProducts.add(product2);
+
+        assertEquals(expectedProducts, cart.getProducts());
     }
 
     @Test
-    void RemoveProduct_ContainedProduct_ShouldRemoveProduct() {
-        var product = new Product(0, "New product", 1);
-        cart.addProduct(product);
+    void getProducts() {
+        Cart cart = new Cart();
+        Product product1 = new Product(1, "Product 1");
+        Product product2 = new Product(2, "Product 2");
 
-        cart.removeProduct(product);
+        cart.addProduct(product1);
+        cart.addProduct(product2);
 
-        assertFalse(cart.getProducts().contains(product));
-    }
+        List<Product> expectedProducts = new ArrayList<>();
+        expectedProducts.add(product1);
+        expectedProducts.add(product2);
 
-    @Test
-    void RemoveProduct_InvalidProduct_ShouldReturnFalse() {
-        var product = new Product(0, "New product", 1);
-
-        var actual = cart.removeProduct(product);
-
-        assertFalse(actual);
+        assertEquals(expectedProducts, cart.getProducts());
     }
 }
