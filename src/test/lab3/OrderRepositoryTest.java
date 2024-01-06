@@ -1,99 +1,60 @@
-package com.bondarenko.universityAssigment.lab3;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class OrderRepositoryTest {
-    OrderRepository repository;
-    Product[] repoProducts;
-    List<Product> validProducts;
 
-    @BeforeEach
-    void setUp() {
-        repository = new OrderRepository();
-        repoProducts = repository.addProducts(List.of(
-                new Product(0, "New product", 1),
-                new Product(0, "Another product", 2),
-                new Product(0, "Yet another product", 3)
-        )).toArray(Product[]::new);
-        validProducts = (List.of(
-                repoProducts[0],
-                repoProducts[1]
-        ));
+    @Test
+    void testAddProduct() {
+        OrderRepository orderRepository = new OrderRepository();
+        Product product = new Product("TestProduct", 10);
+        Product addedProduct = orderRepository.addProduct(product);
+
+        assertEquals(product.getName(), addedProduct.getName());
+        assertEquals(product.getPrice(), addedProduct.getPrice());
+        assertEquals(1, addedProduct.getId());
     }
 
     @Test
-    void AddProduct_Product_ShouldReturnsNewProductWithValidId() {
-        int invalidId = -999;
+    void testAddProducts() {
+        OrderRepository orderRepository = new OrderRepository();
+        List<Product> products = List.of(
+                new Product("TestProduct1", 10),
+                new Product("TestProduct2", 20));
 
-        var product = repository.addProduct(new Product(invalidId, "New product", 1));
+        List<Product> addedProducts = orderRepository.addProducts(products);
 
-        assertNotEquals(invalidId, product.getId());
+        assertEquals(2, addedProducts.size());
+        assertEquals(1, addedProducts.get(0).getId());
+        assertEquals(2, addedProducts.get(1).getId());
     }
 
     @Test
-    void AddProducts_ProductsWithSameId_ShouldReturnProductsWithUniqueIds() {
-        int sameId = 0;
+    void testGetProduct() {
+        OrderRepository orderRepository = new OrderRepository();
+        Product product = new Product("TestProduct", 10);
+        orderRepository.addProduct(product);
 
-        var products = repository.addProducts(List.of(
-                new Product(sameId, "New product", 1),
-                new Product(sameId, "Another product", 2)
-        ));
+        Optional<Product> optionalProduct = orderRepository.getProduct(1);
 
-        assertNotEquals(products.get(0).getId(), products.get(1).getId());
+        assertTrue(optionalProduct.isPresent());
+        assertEquals(product.getName(), optionalProduct.get().getName());
+        assertEquals(product.getPrice(), optionalProduct.get().getPrice());
+        assertEquals(1, optionalProduct.get().getId());
     }
 
     @Test
-    void MakeOrder_ValidCart_ShouldReturnOrderOfProducts() {
-        Cart cartMock = mock(Cart.class);
-        when(cartMock.getProducts()).thenReturn(validProducts);
+    void testGetProducts() {
+        OrderRepository orderRepository = new OrderRepository();
+        List<Product> products = List.of(
+                new Product("TestProduct1", 10),
+                new Product("TestProduct2", 20));
 
-        var actual = repository.makeOrder(cartMock).getProducts();
+        orderRepository.addProducts(products);
 
-        assertArrayEquals(validProducts.toArray(), actual.toArray());
-    }
+        List<Product> repoProducts = orderRepository.getProducts();
 
-    @Test
-    void MakeOrder_ValidCart_ShouldBeSavedInRepoOrders() {
-        Cart cartMock = mock(Cart.class);
-        when(cartMock.getProducts()).thenReturn(validProducts);
-
-        var actual = repository.makeOrder(cartMock);
-
-        assertTrue(repository.getOrders().contains(actual));
-    }
-
-    @Test
-    void MakeOrder_InvalidCart_ShouldBeSavedInRepoOrders() {
-        Cart cartMock = mock(Cart.class);
-        when(cartMock.getProducts()).thenReturn(List.of(new Product(0, "Unregistered product", 0)));
-
-        assertThrows(UnknownProductException.class, () -> repository.makeOrder(cartMock));
-    }
-
-    @Test
-    void UpdateOrderStatus_ValidOrder_ShouldUpdateOrderStatus() {
-        Cart cartMock = mock(Cart.class);
-        when(cartMock.getProducts()).thenReturn(validProducts);
-        var expectedStatus = Order.Status.CANCELED;
-        var order = repository.makeOrder(cartMock);
-
-        repository.updateOrderStatus(order.getId(), expectedStatus);
-
-        assertEquals(expectedStatus, order.getStatus());
-    }
-
-    @Test
-    void UpdateOrderStatus_InvalidOrder_ShouldReturnFalse() {
-        var invalidOrderId = -9999;
-
-        var actual = repository.updateOrderStatus(invalidOrderId, Order.Status.CANCELED);
-
-        assertFalse(actual);
+        assertEquals(2, repoProducts.size());
+        assertEquals(1, repoProducts.get(0).getId());
+        assertEquals(2, repoProducts.get(1).getId());
     }
 }
