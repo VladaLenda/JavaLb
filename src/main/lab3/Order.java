@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +25,23 @@ public class Order {
     public int getId() {
         return id;
     }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status Status) {
+        this.status = Status;
+    }
+
+    public void cancelOrder() {
+        this.status = Status.CANCELED;
+    }
+}
 
     public List<Product> getProducts() {
         return products;
