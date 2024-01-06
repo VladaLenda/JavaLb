@@ -1,5 +1,5 @@
 
-public class Product {
+    public class Product {
     private final int id;
     private String name;
     private double price;
