@@ -1,58 +1,46 @@
-package com.bondarenko.universityAssigment.lab5;
-import com.bondarenko.universityAssigment.lab5.exceptions.*;
-
-import org.junit.jupiter.api.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class BankAccountTest {
-    BankAccount bankAccount;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import lab5.bankAccount.BankAccount;
+import lab5.exceptions.InsufficientFundsException;
+import lab5.exceptions.NegativeAmountException;
+
+
+public class BankAccountTest {
+    private BankAccount account;
+
     @BeforeEach
     void setUp() {
-        bankAccount = new BankAccount(1, "Test account", 100);
+
+        account = new BankAccount(1, "John", 1000);
     }
 
     @Test
-    void Deposit_PositiveAmount_ShouldIncreaseAccountBalance() {
-        var depositAmount = 50;
-        var balanceBeforeDeposit = bankAccount.getBalance();
-
-        bankAccount.deposit(depositAmount);
-
-        assertEquals(depositAmount, bankAccount.getBalance() - balanceBeforeDeposit);
+    public void testDeposit() throws NegativeAmountException {
+        account.deposit(500);
+        assertEquals(1500, account.getBalance());
     }
 
     @Test
-    void Deposit_NegativeAmount_ShouldThrowNegativeAmountException() {
-        var negativeAmount = -50;
-
-
-        assertThrows(NegativeAmountException.class, () -> bankAccount.deposit(negativeAmount));
+    public void testNegativeAmountExceptionOnDeposit() {
+        assertThrows(NegativeAmountException.class, () -> account.deposit(-100));
     }
 
     @Test
-    void Withdraw_PositiveAmount_ShouldIncreaseAccountBalance() {
-        var withdrawAmount = 50;
-        var balanceBeforeWithdraw = bankAccount.getBalance();
-
-        bankAccount.withdraw(withdrawAmount);
-
-        assertEquals(balanceBeforeWithdraw - withdrawAmount, bankAccount.getBalance());
+    public void testWithdraw() throws NegativeAmountException, InsufficientFundsException {
+        account.withdraw(500);
+        assertEquals(500, account.getBalance());
     }
 
     @Test
-    void Withdraw_NegativeAmount_ShouldThrowNegativeAmountException() {
-        var negativeAmount = -50;
-
-
-        assertThrows(NegativeAmountException.class, () -> bankAccount.withdraw(negativeAmount));
+    public void testInsufficientFundsExceptionOnWithdraw() {
+        assertThrows(InsufficientFundsException.class, () -> account.withdraw(1500));
     }
 
     @Test
-    void Withdraw_AmountBiggerThanBalance_ShouldThrowInsufficientFundsException() {
-        var bigAmount = 99999999;
-
-
-        assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(bigAmount));
+    public void testNegativeAmountExceptionOnWithdraw() {
+        assertThrows(NegativeAmountException.class, () -> account.withdraw(-100));
     }
 }
