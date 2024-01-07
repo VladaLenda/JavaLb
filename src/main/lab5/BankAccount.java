@@ -1,58 +1,43 @@
-package com.bondarenko.universityAssigment.lab5;
-
-import com.bondarenko.universityAssigment.lab5.exceptions.InsufficientFundsException;
-import com.bondarenko.universityAssigment.lab5.exceptions.NegativeAmountException;
-
-import java.math.BigDecimal;
+import lab5.exceptions.InsufficientFundsException;
+import lab5.exceptions.NegativeAmountException;
 
 public class BankAccount {
-    private final int accountNumber;
+    private int accountNumber;
     private String accountName;
-    private BigDecimal balance;
+    private double balance;
 
-    public BankAccount(int accountNumber, String accountName, double balance) {
+    public BankAccount(int accountNumber, String accountName, double initialDeposit) {
         this.accountNumber = accountNumber;
         this.accountName = accountName;
-        this.balance = new BigDecimal(balance);
-    }
-
-    public BankAccount(int accountNumber, String accountName) {
-        this(accountNumber, accountName, 0);
+        this.balance = initialDeposit;
     }
 
     public void deposit(double amount) throws NegativeAmountException {
         if (amount < 0) {
             throw new NegativeAmountException("Deposit amount cannot be negative");
         }
-
-        balance = balance.add(new BigDecimal(amount));
+        balance += amount;
     }
 
     public void withdraw(double amount) throws NegativeAmountException, InsufficientFundsException {
         if (amount < 0) {
-            throw new NegativeAmountException("Withdraw amount cannot be negative");
+            throw new NegativeAmountException("Withdrawal amount cannot be negative");
         }
-        if (amount > balance.doubleValue()) {
-            throw new InsufficientFundsException("Insufficient funds to withdraw " + amount);
+        if (amount > balance) {
+            throw new InsufficientFundsException("Insufficient funds for withdrawal");
         }
-
-        balance = balance.subtract(new BigDecimal(amount));
-    }
-
-    public double getBalance() {
-        return balance.doubleValue();
+        balance -= amount;
     }
 
     public int getAccountNumber() {
         return accountNumber;
     }
 
-    public String getAccountSummary() {
-        return "Bank account " + accountName + " (" + accountNumber + "), balance: " + balance;
+    public double getBalance() {
+        return balance;
     }
 
-    @Override
-    public String toString() {
-        return getAccountSummary();
+    public String getAccountSummary() {
+        return "Account Number: " + accountNumber + "\nAccount Name: " + accountName + "\nBalance: " + balance;
     }
 }
