@@ -1,6 +1,4 @@
-package com.bondarenko.universityAssigment.lab7;
-
-import com.bondarenko.universityAssigment.lab7.exceptions.ECommersPlatformException;
+import lab7.exceptions.ECommersPlatformException;
 
 import java.io.PrintStream;
 import java.util.*;
