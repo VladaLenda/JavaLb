@@ -1,5 +1,3 @@
-package com.bondarenko.universityAssigment.lab5;
-
 import lab5.exceptions.AccountNotFoundException;
 import lab5.exceptions.InsufficientFundsException;
 import lab5.exceptions.NegativeAmountException;
