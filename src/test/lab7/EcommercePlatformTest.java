@@ -1,6 +1,4 @@
-package com.bondarenko.universityAssigment.lab7;
-
-import com.bondarenko.universityAssigment.lab7.exceptions.*;
+import lab7.exceptions.*;
 
 import org.junit.jupiter.api.*;
 
