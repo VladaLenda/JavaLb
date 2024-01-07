@@ -1,8 +1,6 @@
-package com.bondarenko.universityAssigment.lab7;
-
 import java.util.*;
 
-import com.bondarenko.universityAssigment.lab7.exceptions.*;
+import lab7.exceptions.*;
 
 public class EcommercePlatform {
     private final Map<Integer, User> users = new HashMap<>();
