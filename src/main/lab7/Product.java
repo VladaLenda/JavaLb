@@ -1,5 +1,3 @@
-package com.bondarenko.universityAssigment.lab7;
-
 import lombok.*;
 
 import java.util.Comparator;
